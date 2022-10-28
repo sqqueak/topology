@@ -57,6 +57,7 @@ def get_auth_session(args):
         key = args.key
 
     session = {}
+    session['cert_reqs'] = 'CERT_REQUIRED'
 
     if os.path.exists(cert):
         session["cert_file"] = cert
