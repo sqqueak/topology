@@ -36,7 +36,7 @@ class InvalidPathError(AuthError):
 class IncorrectPasswordError(AuthError):
     pass
 
-class OSGPoolManager(urllib3.PoolManager):
+class TopologyPoolManager(urllib3.PoolManager):
 
     def __init__(self):
         self.session = False
