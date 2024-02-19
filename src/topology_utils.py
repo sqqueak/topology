@@ -94,7 +94,7 @@ class TopologyPoolManager(urllib3.PoolManager):
         return True
 >>>>>>> 4a32d212 (Revamped structure)
 
-    def update_url_hostname(url, args):
+    def update_url_hostname(self, url, args):
         """
         Given a URL and an argument object, update the URL's hostname
         according to args.host and return the newly-formed URL.
@@ -105,7 +105,7 @@ class TopologyPoolManager(urllib3.PoolManager):
         url_list[1] = args.host
         return urlparse.urlunsplit(url_list)
 
-    def get_contact_list_info(contact_list):
+    def get_contact_list_info(self, contact_list):
         """
         Get contact list info out of contact list
 
@@ -381,7 +381,7 @@ class TopologyPoolManager(urllib3.PoolManager):
     def get_resource_contacts_by_fqdn(self, args):
         return self.get_resource_contacts_by_name_and_fqdn(args)[1]
 
-    def filter_contacts(args, results):
+    def filter_contacts(self, args, results):
         """
         Given a set of result contacts, filter them according to given arguments
         """
