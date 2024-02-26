@@ -54,22 +54,6 @@ class TopologyPoolManager(urllib3.PoolManager):
             cert = '/tmp/x509up_u%d' % euid
             key = '/tmp/x509up_u%d' % euid
 
-<<<<<<< HEAD
-    session = {}
-    session['cert_reqs'] = 'CERT_REQUIRED'
-
-    if os.path.exists(cert):
-        session["cert_file"] = cert
-    else:
-        raise InvalidPathError("Error: could not find cert at %s" % cert)
-    
-    if os.path.exists(key):
-        session["key_file"] = key
-    else:
-        raise InvalidPathError("Error: could not find key at %s" % key)
-    session['cert_reqs'] = 'CERT_REQUIRED'
-    return urllib3.PoolManager(**session, key_password=getpass("decryption password: "))
-=======
         cert = os.environ.get('X509_USER_PROXY', cert)
         key = os.environ.get('X509_USER_PROXY', key)
 
@@ -83,7 +67,7 @@ class TopologyPoolManager(urllib3.PoolManager):
             session["cert_file"] = cert
         else:
             raise InvalidPathError("Error: could not find cert at %s" % cert)
-        
+
         if os.path.exists(key):
             session["key_file"] = key
         else:
@@ -92,7 +76,6 @@ class TopologyPoolManager(urllib3.PoolManager):
         session['key_password'] = getpass("decryption password: ")
         super().__dict__.update(**session)
         return True
->>>>>>> 4a32d212 (Revamped structure)
 
     def update_url_hostname(self, url, args):
         """
@@ -400,34 +383,20 @@ class TopologyPoolManager(urllib3.PoolManager):
                         args.fqdn_filter not in fqdn:
                     del results[fqdn]
 
-        if args.contact_type != 'all':
+        if 'all' not in args.contact_type:
             # filter out undesired contact types
             for name in list(results):
                 contact_list = []
                 for contact in results[name]:
                     contact_type = contact['ContactType']
-                    if contact_type.startswith(args.contact_type):
-                        contact_list.append(contact)
+                    for args_contact_type in args.contact_type:
+                        if contact_type.startswith(args_contact_type):
+                            contact_list.append(contact)
                 if contact_list == []:
                     del results[name]
                 else:
                     results[name] = contact_list
 
-<<<<<<< HEAD
-    if 'all' not in args.contact_type:
-        # filter out undesired contact types
-        for name in list(results):
-            contact_list = []
-            for contact in results[name]:
-                contact_type = contact['ContactType']
-                for args_contact_type in args.contact_type:
-                    if contact_type.startswith(args_contact_type):
-                        contact_list.append(contact)
-            if contact_list == []:
-                del results[name]
-            else:
-                results[name] = contact_list
-=======
         if getattr(args, 'contact_emails', None):
             for name in list(results):
                 contact_list = [contact for contact in results[name] if contact['Email'] in args.contact_emails]
@@ -435,6 +404,5 @@ class TopologyPoolManager(urllib3.PoolManager):
                     del results[name]
                 else:
                     results[name] = contact_list
->>>>>>> 4a32d212 (Revamped structure)
 
         return results
